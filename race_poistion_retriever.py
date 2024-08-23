@@ -31,8 +31,5 @@ class RacePositionRetriever():
         """Split the number of laps and position for that lap"""
         laps = [lap['lap'] for lap in lap_time_list]
         positions = [lap['position'] for lap in lap_time_list]
-        # for lap in lap_time_list:
-        #     laps.append(lap['lap'])
-        #     positions.append(lap['position'])
         return laps, positions
         
