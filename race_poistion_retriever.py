@@ -11,7 +11,7 @@ class RacePositionRetriever():
 
     def retrieve_race_informations(self) -> list[dict[str, int]]:
         """Retrieve all the data to compare the two drivers"""
-        filename = os.path.join('CSV Data', 'results.csv')
+        filename = os.path.join('F1_Project','CSV Data', 'lap_times.csv')
         try:
 
             with open(filename) as f:

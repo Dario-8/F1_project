@@ -44,5 +44,28 @@ def get_constructor():
 
     return jsonify(constructors), 200
 
+@app.route('/get_lap_times', methods=['GET'])
+def get_lap_times():
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+
+    # Get the JSON data from the request body
+    input_data = request.get_json()
+
+    if not input_data or ('raceId' and 'driverId' not in input_data):
+        return jsonify({"error": "Missing required parameter: constructorRef"}), 400
+
+    raceId = input_data['raceId']
+    driverId = input_data['driverId']
+
+    query = "SELECT * FROM lapTimes lt where lt.raceId = %s and lt.driverId = %s"
+    cursor.execute(query, (raceId, driverId))
+    constructors = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return jsonify(constructors), 200
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
