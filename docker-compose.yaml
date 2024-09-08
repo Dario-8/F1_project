@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  ergastdb:
+    container_name: ergastdb
+    build: /ergast-f1-api-master/ergastdb/
+    environment:
+      MYSQL_ROOT_PASSWORD: f1
+      MYSQL_DATABASE: ergastdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./f1db.sql:/docker-entrypoint-initdb.d/f1db.sql
+
+  f1api:
+    container_name: F1_API
+    image: dario8/firstapi
+    ports:
+      - "5000:5000"
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+
