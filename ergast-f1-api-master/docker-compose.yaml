@@ -1,0 +1,27 @@
+version: '3'
+services:
+  ergastdb:
+    container_name: ergastdb
+    build: ergastdb/
+    environment:
+      MYSQL_ROOT_PASSWORD: f1
+      MYSQL_DATABASE: ergastdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./f1db.sql:/docker-entrypoint-initdb.d/f1db.sql
+
+
+# Uncomment this section if you want to use the RStudio container
+#  f1dj_rstudio:
+#    image: rocker/tidyverse 
+#    ports:
+#      - "8787:8787"
+#    links:
+#      - ergastdb:ergastdb
+#    volumes:
+#      - ./rstudio:/home/rstudio
+
+#docker-compose up --build -d
+#docker-compose build --force-rm
+#docker-compose up -d
