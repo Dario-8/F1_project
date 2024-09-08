@@ -1,5 +1,8 @@
 import csv
 import os
+import json
+import requests
+from lap_time import LapTime
 
 class RacePositionRetriever():
     """A class to retrieve the informations about drivers during a passed race"""
@@ -28,6 +31,31 @@ class RacePositionRetriever():
             print(msg)
 
         return lap_time_list
+    
+    def retrieve_race_informations_from_api(self):
+
+        # URL of the API endpoint
+        url = 'http://127.0.0.1:5000/get_lap_times'
+
+        payload = {
+            "raceId": int(self.raceId),
+            "driverId": int(self.driverId)
+        }
+
+        # Make a POST request to the API with JSON data
+        response = requests.post(url, json=payload)
+        
+        # Parse the JSON response directly
+        laps_data = response.json()
+
+        # Now use the data directly to create LapTime instances
+        lap_times: list[LapTime] = [LapTime(lap['driverId'], lap['lap'],
+                                            lap['milliseconds'], lap['position'],
+                                            lap['raceId'], lap['time'])
+                                    for lap in laps_data]
+            
+        return lap_times
+
 
     def split_laps_positions(self, lap_time_list: list[dict[str, int]]) -> tuple[list[int], list[int]]:
         """Split the number of laps and position for that lap"""
@@ -35,4 +63,12 @@ class RacePositionRetriever():
         positions = [lap['position'] for lap in lap_time_list]
 
         return laps, positions
+    
+    def split_laps_positions(self, lap_time_list: list[LapTime]) -> tuple[list[int], list[int]]:
+        """Split the number of laps and position for that lap"""
+        laps = [lap_time.lap for lap_time in lap_time_list]
+        positions = [lap_time.position for lap_time in lap_time_list]
+
+        return laps, positions
+    
         

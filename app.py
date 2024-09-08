@@ -6,7 +6,7 @@ app = Flask(__name__)
 # Database connection function
 def get_db_connection():
     connection = mysql.connector.connect(
-        host="localhost",
+        host="ergastdb",
         user="root",
         password="f1",
         database="ergastdb"
@@ -44,28 +44,33 @@ def get_constructor():
 
     return jsonify(constructors), 200
 
-@app.route('/get_lap_times', methods=['GET'])
+@app.route('/get_lap_times', methods=['POST'])
 def get_lap_times():
-    connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
 
-    # Get the JSON data from the request body
-    input_data = request.get_json()
+        # Get the JSON data from the request body
+        input_data = request.get_json()
 
-    if not input_data or ('raceId' and 'driverId' not in input_data):
-        return jsonify({"error": "Missing required parameter: constructorRef"}), 400
+        if not input_data or 'raceId' not in input_data or 'driverId' not in input_data:
+            return jsonify({"error": "Missing required parameters: raceId and driverId"}), 400
 
-    raceId = input_data['raceId']
-    driverId = input_data['driverId']
+        raceId = input_data['raceId']
+        driverId = input_data['driverId']
 
-    query = "SELECT * FROM lapTimes lt where lt.raceId = %s and lt.driverId = %s"
-    cursor.execute(query, (raceId, driverId))
-    constructors = cursor.fetchall()
+        query = "SELECT * FROM lapTimes lt WHERE lt.raceId = %s AND lt.driverId = %s"
+        cursor.execute(query, (raceId, driverId))
+        lap_times = cursor.fetchall()
 
-    cursor.close()
-    connection.close()
+        cursor.close()
+        connection.close()
 
-    return jsonify(constructors), 200
+        return jsonify(lap_times), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
