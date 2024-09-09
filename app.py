@@ -44,8 +44,8 @@ def get_constructor():
 
     return jsonify(constructors), 200
 
-@app.route('/get_lap_times', methods=['POST'])
-def get_lap_times():
+@app.route('/post_lap_times', methods=['POST'])
+def post_lap_times():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)

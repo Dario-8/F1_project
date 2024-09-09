@@ -35,7 +35,7 @@ class RacePositionRetriever():
     def retrieve_race_informations_from_api(self):
 
         # URL of the API endpoint
-        url = 'http://127.0.0.1:5000/get_lap_times'
+        url = 'http://127.0.0.1:5000/post_lap_times'
 
         payload = {
             "raceId": int(self.raceId),
