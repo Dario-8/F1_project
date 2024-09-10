@@ -1,4 +1,3 @@
-
 class LapTime():
     """A class to store lap time informations"""
     def __init__(self, driverId: int, lap: int, milliseconds: int,
@@ -14,5 +13,3 @@ class LapTime():
     
     def __repr__(self) -> str:
         return f'DriverId {self.driverId!r}, Lap {self.lap!r}'
-    
-    
